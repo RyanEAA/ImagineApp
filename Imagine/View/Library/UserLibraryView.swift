@@ -42,6 +42,8 @@ struct UserLibraryView: View {
                 
                 // Library Section
                 VStack(alignment: .leading, spacing: 20) {
+                    
+                    
                     // Websites Section
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Websites")
@@ -59,15 +61,7 @@ struct UserLibraryView: View {
                                             Label("Delete", systemImage: "trash")
                                         }
                                     } // end of swipe left to delete
-//                                    .swipeActions(edge: .leading) {
-//                                        // Swipe Right to Edit
-//                                        Button {
-//                                            bookToEdit = book
-//                                        } label: {
-//                                            Label("Edit", systemImage: "pencil")
-//                                        }
-//                                        .tint(.blue)
-//                                    } // end of swip right to edit
+
                             }
                             .onDelete(perform: deleteBook)
 
@@ -78,16 +72,28 @@ struct UserLibraryView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
                     
+                    
+                    
                     // Pictures Section
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Pictures")
                             .font(.headline)
                             .padding(.leading)
                         
-                        List(filteredPictures, selection: $pictureSelection) { picture in
-                            NavigationLink(destination: PictureView(picture: picture)) {
+                        List{
+                            ForEach(filteredPictures) { picture in
                                 PictureRow(picture: picture)
+                                    .swipeActions(edge: .trailing){
+                                        // swipe left to delete
+                                        Button(role: .destructive) {
+                                            deletePicture(picture)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    } // end of swipe left
                             }
+                            .onDelete(perform: deletePicture)
+
                         }
                         .frame(maxHeight: 200)
                     }
@@ -122,11 +128,29 @@ struct UserLibraryView: View {
         }
     }
     
+    // Delete Functions
+    // delete picture from swiftdata
+    func deletePicture(_ picture: SavedPicture) {
+        modelContext.delete(picture) // Delete from the context
+        try? modelContext.save() // Save the changes
+    }
+    
+    // delete book from row function
+    func deletePicture(at offsets: IndexSet) {
+        for index in offsets {
+            let picture = filteredPictures[index]
+            deletePicture(picture)
+        }
+    }
+    
+    
+    // delete book from swiftdata
     func deleteBook(_ book: Book) {
         modelContext.delete(book) // Delete from the context
         try? modelContext.save() // Save the changes
     }
     
+    // delete book from row function
     func deleteBook(at offsets: IndexSet) {
         for index in offsets {
             let book = filteredBooks[index]
