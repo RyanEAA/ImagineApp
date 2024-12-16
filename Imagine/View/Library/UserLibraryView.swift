@@ -10,6 +10,7 @@ import SwiftData
 
 struct UserLibraryView: View {
     @EnvironmentObject var authManager: AuthenticationManager
+    @Environment(\.modelContext) private var modelContext
     
     // Holds book and picture queries
     @Query private var books: [Book]
@@ -47,10 +48,29 @@ struct UserLibraryView: View {
                             .font(.headline)
                             .padding(.leading)
                         
-                        List(filteredBooks, selection: $bookSelection) { book in
-                            NavigationLink(destination: BookView(book: book)) {
+                        List {
+                            ForEach(filteredBooks) { book in
                                 BookRow(book: book)
+                                    .swipeActions(edge: .trailing) {
+                                        // Swipe Left to Delete
+                                        Button(role: .destructive) {
+                                            deleteBook(book)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    } // end of swipe left to delete
+//                                    .swipeActions(edge: .leading) {
+//                                        // Swipe Right to Edit
+//                                        Button {
+//                                            bookToEdit = book
+//                                        } label: {
+//                                            Label("Edit", systemImage: "pencil")
+//                                        }
+//                                        .tint(.blue)
+//                                    } // end of swip right to edit
                             }
+                            .onDelete(perform: deleteBook)
+
                         }
                         .frame(maxHeight: 200)
                     }
@@ -77,6 +97,9 @@ struct UserLibraryView: View {
                 }
                 .padding(.top)
                 
+                
+                
+                
                 // Camera Button
                 HStack(alignment: .bottom){
                     Spacer()
@@ -96,6 +119,18 @@ struct UserLibraryView: View {
             .sheet(isPresented: $isAddBookViewShown) {
                 AddBookView()
             }
+        }
+    }
+    
+    func deleteBook(_ book: Book) {
+        modelContext.delete(book) // Delete from the context
+        try? modelContext.save() // Save the changes
+    }
+    
+    func deleteBook(at offsets: IndexSet) {
+        for index in offsets {
+            let book = filteredBooks[index]
+            deleteBook(book)
         }
     }
     
