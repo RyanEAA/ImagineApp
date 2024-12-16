@@ -53,19 +53,18 @@ struct AddBookView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    Task {
+                    Task {  // waiting to verify location
                         await attemptSave()
                     }
                 }) {
                     Text("Save")
-                        .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.pink)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                       
                 }
+                .buttonStyle(.borderedProminent)
+                .tint(.pink)
                 .padding(.horizontal)
+                .disabled(newTitle.isEmpty || newURLString.isEmpty || newLocation.isEmpty ) // disables button
                 Spacer()
             }
             Spacer()
@@ -97,7 +96,9 @@ struct AddBookView: View {
         }
     }
     
+    // saves book to swiftdata
     func saveBook() {
+        // create newBook
         let newBook = Book(
             id: UUID(),
             username: authManager.currentUser?.username ?? "",

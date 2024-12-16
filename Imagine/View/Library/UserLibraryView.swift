@@ -52,19 +52,19 @@ struct UserLibraryView: View {
                         
                         List {
                             ForEach(filteredBooks) { book in
-                                BookRow(book: book)
-                                    .swipeActions(edge: .trailing) {
-                                        // Swipe Left to Delete
-                                        Button(role: .destructive) {
-                                            deleteBook(book)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    } // end of swipe left to delete
-
+                                NavigationLink(destination: BookView(book: book)) {
+                                    BookRow(book: book)
+                                }
+                                .swipeActions(edge: .trailing) {
+                                    // Swipe Left to Delete
+                                    Button(role: .destructive) {
+                                        deleteBook(book)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                } // end of swipe left to delete
                             }
                             .onDelete(perform: deleteBook)
-
                         }
                         .frame(maxHeight: 200)
                     }
@@ -82,7 +82,9 @@ struct UserLibraryView: View {
                         
                         List{
                             ForEach(filteredPictures) { picture in
-                                PictureRow(picture: picture)
+                                NavigationLink(destination: PictureView(picture: picture)){
+                                    PictureRow(picture: picture)
+                                }
                                     .swipeActions(edge: .trailing){
                                         // swipe left to delete
                                         Button(role: .destructive) {
