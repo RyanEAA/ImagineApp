@@ -50,16 +50,18 @@ struct LoginView: View {
                 .padding(.horizontal, 32)
                 
                 // Login Button
-                Button("Login") {
+                Button(action: {
                     Login()
+                }) {
+                    Text("Login")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(username.isEmpty || password.isEmpty ? Color.gray : Color.pink)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(username.isEmpty || password.isEmpty ? Color.gray : Color.pink)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-                .disabled(username.isEmpty || password.isEmpty)
                 .padding(.horizontal, 32)
+                .disabled(username.isEmpty || password.isEmpty)
                 
                 // Create New Account Link
                 NavigationLink(destination: CreateUserView()) {
