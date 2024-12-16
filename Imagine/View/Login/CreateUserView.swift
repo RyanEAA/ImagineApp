@@ -52,26 +52,19 @@ struct CreateUserView: View {
             }
             .padding(.horizontal, 32)
             
-            // Create Account Button
-            Button("Create Account") {
+            // Create Account Button            
+            Button(action: {
                 CreateAccount()
+            }) {
+                Text("Login")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(username.isEmpty || password.isEmpty ? Color.gray : Color.pink)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(username.isEmpty || password.isEmpty ? Color.gray : Color.pink)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .disabled(username.isEmpty || password.isEmpty)
             .padding(.horizontal, 32)
-            
-            // Button to List Users (for debugging)
-//            Button("List Users") {
-//                for user in users {
-//                    print("\(user.username): \(user.password)")
-//                }
-//            }
-//            .padding(.top, 16)
-//            .foregroundColor(.white)
+            .disabled(username.isEmpty || password.isEmpty)
             
             Spacer()
         }
