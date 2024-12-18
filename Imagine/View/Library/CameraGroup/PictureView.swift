@@ -22,6 +22,12 @@ struct PictureView: View {
 
     // Text-to-speech synthesizer
     let speechSynthesizer = AVSpeechSynthesizer()
+    
+    // controls whether sheet is showing
+    @State private var showingImageSheet = false
+    
+    // For fetching generated image
+    @StateObject private var imageFetcher = ImageFetcher()
 
     var body: some View {
         ScrollView {
@@ -112,9 +118,39 @@ struct PictureView: View {
                             .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 3)
                     }
                     .padding(.horizontal)
+                    
+                    Button {
+                        generateArt()
+                    } label: {
+                        Text("GenArt")
+                            .font(.headline)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(recognizedText.isEmpty ? Color.gray : Color.purple)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                            .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 3)
+                    }
+                    .padding(.horizontal)
+
                 }
             }
             .padding()
+            .sheet(isPresented: $showingImageSheet) {
+                if imageFetcher.isLoading {
+                    VStack {
+                        ProgressView("Generating Image...")
+                            .padding()
+                        Text("Please wait while your art is being generated.")
+                            .multilineTextAlignment(.center)
+                            .padding()
+                    }
+                } else if let generatedImage = imageFetcher.image {
+                    AIImageView(image: generatedImage)
+                } else {
+                    Text("No image available.")
+                }
+            }
         }
         .navigationTitle("Picture Details")
         .navigationBarTitleDisplayMode(.inline)
@@ -151,6 +187,12 @@ struct PictureView: View {
                 completion(nil)
             }
         }
+    }
+    
+    private func generateArt(){
+        print("Generating Art")
+        imageFetcher.fetchImage(prompt: recognizedText)
+        showingImageSheet.toggle()
     }
 
     private func readRecognizedText() {

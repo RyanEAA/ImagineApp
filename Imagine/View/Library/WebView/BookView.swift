@@ -40,6 +40,7 @@ struct BookView: View {
             // Button Section
             buttonSection
                 .padding(.horizontal)
+                .disabled(highlightedText == "")
             
             // WebView Section
             VStack {
@@ -81,7 +82,7 @@ struct BookView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .background(Color.blue)
+                    .background(highlightedText.isEmpty ? Color.gray : Color.blue)
                     .cornerRadius(12)
                     .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             }
@@ -95,11 +96,12 @@ struct BookView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .background(Color.purple)
+                    .background(highlightedText.isEmpty ? Color.gray : Color.purple)
                     .cornerRadius(12)
                     .shadow(color: .purple.opacity(0.3), radius: 5, x: 0, y: 3)
             }
         }
+
     }
     
     // MARK: - Helper Functions
