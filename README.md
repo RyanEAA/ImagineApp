@@ -2,8 +2,7 @@
 App that allows users to read the text from websites or images using their preferred voice. 
 
 # Tech
-App was made using SwiftUI. The image generator uses pollination.ai and the time to generate images fluctuates based on traffic. All user data is saved locally.
-The text-to-speech uses Apple's vision kit, to recognize text, Speechsynthesizer is then used to read the text using the user's preferred language
+App was made using **SwiftUI**. The image generator uses **pollination.ai api**, the time to generate images fluctuates based on traffic. All user data is saved locally using **Swift Data**. The text-to-speech uses Apple's **Vision Kit**, to recognize text, **Speechsynthesizer** is then used to read the text using the user's preferred language
 
 ## Use
 Requirements:
