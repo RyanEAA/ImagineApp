@@ -74,12 +74,11 @@ struct CameraView: View {
                             .shadow(radius: 5)
                             .padding(.horizontal)
                     } else {
-                        Image(systemName: "photo")
+                        Image("selectImage")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 120, height: 120)
                             .foregroundColor(.gray)
-                            .opacity(0.5)
                     }
                 }
                 .onTapGesture {
